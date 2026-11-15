@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <!-- Meta tags for character set, compatibility, and responsive design -->
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your Portfolio</title>
+    <meta name="description" content="X_XGL_ 的个人主页：前端项目与实验记录。" />
+    <title>X_XGL_ | 个人主页</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./img.svg" />
     <!-- Link to external CSS file -->
     <link rel="stylesheet" href="./css/main.css" />
   </head>
@@ -16,8 +19,25 @@
         <div class="nav-row">
           <!-- Logo with link to the homepage -->
           <a href="./index.html" class="logo"
-            ><strong>Your</strong> portfolio</a
+            ><strong>X_XGL_</strong><span class="logo__sub">个人主页</span></a
           >
+
+          <!-- Navigation links -->
+          <ul class="nav-list">
+            <li class="nav-list__item">
+              <a
+                href="#projects"
+                class="nav-list__link nav-list__link--active"
+                >项目</a
+              >
+            </li>
+            <li class="nav-list__item">
+              <a href="#about" class="nav-list__link">关于</a>
+            </li>
+            <li class="nav-list__item">
+              <a href="./contacts.html" class="nav-list__link">联系</a>
+            </li>
+          </ul>
 
           <!-- Dark mode toggle button -->
           <button class="dark-mode-btn">
@@ -33,63 +53,127 @@
               class="dark-mode-btn__icon"
             />
           </button>
-
-          <!-- Navigation links -->
-          <ul class="nav-list">
-            <li class="nav-list__item">
-              <a
-                href="./index.html"
-                class="nav-list__link nav-list__link--active"
-                >Home</a
-              >
-            </li>
-            <li class="nav-list__item">
-              <a href="./projects.html" class="nav-list__link">Projects</a>
-            </li>
-            <li class="nav-list__item">
-              <a href="./contacts.html" class="nav-list__link">Contacts</a>
-            </li>
-          </ul>
         </div>
       </div>
     </nav>
 
-    <!-- Header section -->
-    <header class="header">
-      <div class="header__wrapper">
-        <h1 class="header__title">
-          <strong>Hi, my name is <em>Bainda</em></strong
-          ><br />
-          a frontend developer
-        </h1>
-        <div class="header__text">
-          <p>with passion for learning and creating.</p>
+    <!-- Hero section -->
+    <header class="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__grid-bg" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__badge">
+          <span class="hero__dot"></span>正在持续更新
         </div>
-        <!-- Link to download CV -->
-        <a href="./path/to/your-cv.pdf" class="btn" download>Download CV</a>
+        <img src="./img.svg" alt="X_XGL_ 头像" class="hero__avatar" />
+        <h1 class="hero__title">
+          <span class="hero__name">X_XGL_</span>
+          <span class="hero__line">写代码，也写生活</span>
+        </h1>
+        <p class="hero__desc">
+          这里是我的个人项目与实验：写代码、搭东西，
+          把想法做成一个能点开的页面。项目自动同步自 GitHub。
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="#projects">查看项目</a>
+          <a class="btn btn-ghost" href="#about">关于我</a>
+        </div>
+        <div class="hero__meta">
+          <span id="heroUpdated">正在同步 GitHub</span>
+          <span class="hero__meta-divider"></span>
+          <span id="heroCount">项目加载中…</span>
+        </div>
       </div>
     </header>
 
-    <!-- Main content section -->
-    <main class="section">
-      <div class="container">
-        <ul class="content-list">
-          <!-- Frontend skills list -->
-          <li class="content-list__item">
-            <h2 class="title-2">Frontend</h2>
-            <p>
-              JavaScript, TypeScript, ReactJS, Angular, Redux, HTML, CSS, Scss,
-              NPM, BootStrap, MaterialUI, Yarn, TailwindCSS, StyledComponents
+    <!-- Projects -->
+    <main>
+      <section class="section" id="projects">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="section-eyebrow">PROJECTS</p>
+            <h2 class="section-title">个人项目</h2>
+            <p class="section-sub">
+              实时同步自 GitHub，点击卡片查看项目 README。
             </p>
-          </li>
-          <!-- Backend skills list -->
-          <li class="content-list__item">
-            <h2 class="title-2">Backend</h2>
-            <p>NodeJS, MySQL, MongoDB, PHP, Laravel</p>
-          </li>
-        </ul>
-      </div>
+          </div>
+
+          <div class="posts" id="projectGrid">
+            <div class="posts__status">正在从 GitHub 加载项目…</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="section about" id="about">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="section-eyebrow">ABOUT</p>
+            <h2 class="section-title">关于我</h2>
+          </div>
+          <div class="about__grid reveal">
+            <div class="about__text">
+              <p>
+                我是 <strong>X_XGL_</strong>，一个还在路上的前端开发者。
+                白天写页面，晚上折腾自己的小项目，于是有了这个主页。
+              </p>
+              <p>
+                这里没有提纲，也没有标准答案。只有一个人在屏幕前的诚实记录——
+                关于技术、关于成长，也关于怎么把日子过得像自己。
+              </p>
+            </div>
+            <ul class="about__facts">
+              <li><span>身份</span><strong>前端开发者</strong></li>
+              <li><span>方向</span><strong>Web 前端 · 交互与体验</strong></li>
+              <li><span>工具</span><strong>HTML / CSS / JavaScript</strong></li>
+              <li><span>状态</span><strong>持续学习，偶尔更新</strong></li>
+            </ul>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <!-- Project detail modal -->
+    <div class="modal" id="projectModal" aria-hidden="true">
+      <div class="modal__backdrop" data-close></div>
+      <div
+        class="modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <button class="modal__close" data-close aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </button>
+
+        <div class="modal__head">
+          <p class="modal__eyebrow" id="modalLang">PROJECT</p>
+          <h2 class="modal__title" id="modalTitle">项目</h2>
+          <p class="modal__desc" id="modalDesc"></p>
+          <div class="modal__actions">
+            <a
+              class="btn"
+              id="modalRepo"
+              href="https://github.com/Liu134921"
+              target="_blank"
+              rel="noopener"
+              >在 GitHub 查看</a
+            >
+            <span class="modal__stars" id="modalStars"></span>
+          </div>
+        </div>
+
+        <div class="modal__readme" id="modalReadme"></div>
+      </div>
+    </div>
 
     <!-- Footer section -->
     <footer class="footer">
@@ -98,26 +182,22 @@
           <!-- Social media links -->
           <ul class="social">
             <li class="social__item">
-              <a href="#!"><img src="./img/icons/vk.svg" alt="Link" /></a>
-            </li>
-            <li class="social__item">
-              <a href="#!"
-                ><img src="./img/icons/instagram.svg" alt="Link"
+              <a
+                href="https://github.com/Liu134921"
+                target="_blank"
+                rel="noopener"
+                ><img src="./img/icons/gitHub.svg" alt="GitHub"
               /></a>
             </li>
             <li class="social__item">
-              <a href="#!"><img src="./img/icons/twitter.svg" alt="Link" /></a>
-            </li>
-            <li class="social__item">
-              <a href="#!"><img src="./img/icons/gitHub.svg" alt="Link" /></a>
-            </li>
-            <li class="social__item">
-              <a href="#!"><img src="./img/icons/linkedIn.svg" alt="Link" /></a>
+              <a href="./contacts.html"
+                ><img src="./img/icons/twitter.svg" alt="联系我"
+              /></a>
             </li>
           </ul>
           <!-- Copyright information -->
           <div class="copyright">
-            <p>© 2025 Bainda</p>
+            <p>© 2026 X_XGL_ · 写代码，也写生活</p>
           </div>
         </div>
       </div>
