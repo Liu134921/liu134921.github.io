@@ -93,6 +93,10 @@ const GITHUB_USER = "Liu134921";
 const projectGrid = document.getElementById("projectGrid");
 const heroUpdated = document.getElementById("heroUpdated");
 const heroCount = document.getElementById("heroCount");
+const overviewProjects = document.getElementById("overviewProjects");
+const biliFollower = document.getElementById("biliFollower");
+const biliFollowing = document.getElementById("biliFollowing");
+const biliVideos = document.getElementById("biliVideos");
 
 const modal = document.getElementById("projectModal");
 const modalLang = document.getElementById("modalLang");
@@ -134,6 +138,119 @@ function setHeroMeta(repos) {
 
   heroUpdated.textContent = `最近更新 ${latest.updated_at.slice(0, 10)}`;
   heroCount.textContent = `共 ${repos.length} 个项目`;
+}
+
+const LANGUAGE_COLORS = {
+  JavaScript: "#f1e05a",
+  TypeScript: "#3178c6",
+  HTML: "#e34c26",
+  CSS: "#563d7c",
+  Python: "#3572a5",
+  "C++": "#f34b7d",
+  C: "#666666",
+  "C#": "#178600",
+  Java: "#b07219",
+  Go: "#00add8",
+  Rust: "#dea584",
+  Shell: "#89e051",
+  Vue: "#41b883",
+  "Jupyter Notebook": "#da5b0b",
+  Dart: "#00b4ab",
+  Kotlin: "#a97bff",
+};
+
+function formatActivity(isoDate) {
+  const diff = Date.now() - new Date(isoDate).getTime();
+  const hour = 3600000;
+  const day = 86400000;
+
+  if (!Number.isFinite(diff) || diff < 0) return "刚刚更新";
+  if (diff < hour) return "刚刚更新";
+  if (diff < day) return `${Math.floor(diff / hour)} 小时前更新`;
+  if (diff < 30 * day) return `${Math.floor(diff / day)} 天前更新`;
+  if (diff < 365 * day) return `${Math.floor(diff / (30 * day))} 个月前更新`;
+  return `${Math.floor(diff / (365 * day))} 年前更新`;
+}
+
+function renderOverview(repos) {
+  if (!overviewProjects) return;
+
+  const active = [...repos]
+    .sort(
+      (a, b) =>
+        new Date(b.pushed_at || b.updated_at) -
+          new Date(a.pushed_at || a.updated_at) ||
+        b.stargazers_count - a.stargazers_count
+    )
+    .slice(0, 2);
+
+  if (!active.length) {
+    overviewProjects.innerHTML =
+      '<p class="overview__state">还没有公开项目。</p>';
+    return;
+  }
+
+  overviewProjects.innerHTML = "";
+
+  active.forEach((repo) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "overview__item";
+    item.setAttribute("aria-label", `${repo.name}：查看项目介绍`);
+
+    const language = repo.language || "Project";
+    const color = LANGUAGE_COLORS[language] || "var(--accent)";
+
+    item.innerHTML = `
+      <span class="overview__item-top">
+        <span class="overview__name">${escapeHtml(repo.name)}</span>
+        <span class="overview__stars">★ ${repo.stargazers_count}</span>
+      </span>
+      <span class="overview__desc">${escapeHtml(
+        repo.description || "暂无项目描述，点开看看 README 吧。"
+      )}</span>
+      <span class="overview__meta">
+        <span class="overview__lang">
+          <span class="overview__lang-dot" style="background:${color}"></span>
+          ${escapeHtml(language)}
+        </span>
+        <span class="overview__activity">${formatActivity(
+          repo.pushed_at || repo.updated_at
+        )}</span>
+      </span>
+    `;
+
+    item.addEventListener("click", () => openProject(repo));
+    overviewProjects.appendChild(item);
+  });
+}
+
+function formatBiliCount(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  if (number >= 10000) {
+    return `${(number / 10000).toFixed(1).replace(/\.0$/, "")}万`;
+  }
+  return String(number);
+}
+
+async function loadBilibiliStats() {
+  if (!biliFollower) return;
+
+  try {
+    // B 站接口不支持跨域，数字来自本地快照文件
+    const response = await fetch("./data/bilibili.json", { cache: "no-cache" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+    biliFollower.textContent = formatBiliCount(data.follower);
+    biliFollowing.textContent = formatBiliCount(data.following);
+    biliVideos.textContent = formatBiliCount(data.video);
+  } catch (error) {
+    biliFollower.textContent = "—";
+    biliFollowing.textContent = "—";
+    biliVideos.textContent = "—";
+  }
 }
 
 function createProjectCard(repo, index) {
@@ -288,6 +405,7 @@ async function loadProjects() {
 
     projectGrid.innerHTML = "";
     setHeroMeta(repos);
+    renderOverview(repos);
 
     if (!repos.length) {
       projectGrid.innerHTML =
@@ -301,6 +419,9 @@ async function loadProjects() {
   } catch (error) {
     heroUpdated.textContent = "GitHub 同步失败";
     heroCount.textContent = "请稍后刷新重试";
+    if (overviewProjects) {
+      overviewProjects.innerHTML = `<p class="overview__state">项目暂时加载失败，去 <a href="https://github.com/${GITHUB_USER}" target="_blank" rel="noopener">GitHub</a> 看看吧。</p>`;
+    }
     projectGrid.innerHTML = `<p class="posts__status">项目暂时加载失败，可以直接访问 <a href="https://github.com/${GITHUB_USER}" target="_blank" rel="noopener">GitHub 主页</a>。</p>`;
   }
 }
@@ -308,3 +429,5 @@ async function loadProjects() {
 if (projectGrid) {
   loadProjects();
 }
+
+loadBilibiliStats();
